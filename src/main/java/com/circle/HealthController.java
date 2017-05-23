@@ -1,11 +1,10 @@
 package com.circle;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,30 +13,33 @@ import java.util.List;
 @RestController
 public class HealthController {
 
-    HealthStatus healthStatus1 = new HealthStatus(36.6, 45.7, 78.9, 108.9);
-    HealthStatus healthStatus2 = new HealthStatus(37.5, 145.7, 33.9, 15.9);
-    HealthStatus healthStatus3 = new HealthStatus(36.6, 67.34, 22.34, 12.99);
-    HealthStatus healthStatus4 = new HealthStatus(39.0, 34.56, 33.9, 67.9);
-    HealthStatus healthStatus5 = new HealthStatus(36.6, 135.7, 56.5, 115.71);
+    private final Logger logger = LoggerFactory.getLogger(HealthController.class);
+    private final UsersRepository usersRepository;
 
-    List<User> users = Arrays.asList(
-            new User(1, "Anna", "Maria", healthStatus1),
-            new User(2, "Tom", "Hardy", healthStatus2),
-            new User(1, "Perpetua", "Mug", healthStatus3),
-            new User(2, "George", "Wood", healthStatus4),
-            new User(2, "Joan", "Hardy", healthStatus5)
-    );
+    @Autowired
+    public HealthController(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
+
     @RequestMapping("/users/health")
     public List<User> getUsers() {
-
-
+        long start = System.currentTimeMillis();
+        List<User> users = usersRepository.getUsers();
+        logger.info("Get users takes {}", users);
         return users;
     }
 
     @RequestMapping("/users/{id}/health")
     public User getUser(@PathVariable(name = "id") Integer id) {
-        return users.get(id);
+        User user = usersRepository.getUser(id);
+        return user;
     }
 
+
+    @RequestMapping(value = "/users/{id}/health", method = RequestMethod.POST   )
+    public List<User> add(@RequestBody User user) {
+        List<User> users = usersRepository.add(user);
+        return users;
+    }
 
 }
