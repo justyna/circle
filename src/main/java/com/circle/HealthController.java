@@ -23,9 +23,7 @@ public class HealthController {
 
     @RequestMapping("/users/health")
     public List<User> getUsers() {
-        long start = System.currentTimeMillis();
         List<User> users = usersRepository.getUsers();
-        logger.info("Get users takes {}", users);
         return users;
     }
 
@@ -36,7 +34,8 @@ public class HealthController {
     }
 
 
-    @RequestMapping(value = "/users/{id}/health", method = RequestMethod.POST   )
+    @RequestMapping(value = "/users/health", method = RequestMethod.POST,
+            consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
     public List<User> add(@RequestBody User user) {
         List<User> users = usersRepository.add(user);
         return users;
