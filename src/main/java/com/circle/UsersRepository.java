@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by ThinkPad on 22.05.2017.
@@ -41,6 +42,13 @@ public class UsersRepository {
 
     public List<User> getUsersSlower() throws InterruptedException {
         Thread.sleep(5000);
+        return users;
+    }
+
+    public List<User> getUsersWithRandomTime() throws InterruptedException {
+        Random r = new Random();
+        int latency = r.nextInt(10000);
+        Thread.sleep(latency);
         return users;
     }
 
