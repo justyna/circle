@@ -39,6 +39,11 @@ public class UsersRepository {
         return users;
     }
 
+    public List<User> getUsersSlower() throws InterruptedException {
+        Thread.sleep(5000);
+        return users;
+    }
+
     public User getUser(Integer id) {
         return users.get(id);
     }

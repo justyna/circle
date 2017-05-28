@@ -20,10 +20,13 @@ public class HealthController {
     public HealthController(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
+     private static final Logger log = LoggerFactory.getLogger(HealthController.class);
 
     @RequestMapping("/users/health")
-    public List<User> getUsers() {
+    public List<User> getUsers() throws InterruptedException {
+        Long start = System.currentTimeMillis();
         List<User> users = usersRepository.getUsers();
+        log.info("Get all users health data took {} ms.", System.currentTimeMillis() - start);
         return users;
     }
 
